@@ -44,4 +44,4 @@ def update_resident(request, pk):
     context = {
         'form':form,
     }
-    return render(request, 'app1/add-resident.html', context)
+    return render(request, 'app1/update-resident.html', context)

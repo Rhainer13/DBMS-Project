@@ -1,4 +1,5 @@
 {% extends 'app1/base.html' %}
+{% load static %}
 
 {% block content %}
     <!-- header -->
@@ -44,10 +45,15 @@
             <div>{{ resident.gender }}</div>
             <div>{{ resident.purok }}</div>
             <div>{{ resident.phone_number }}</div>
-            <div>
+            <div class="grid grid-cols-2">
                 <a href="{% url 'update-barangay-resident' resident.id %}">
-                    <div class="bg-blue-500 text-white m-0.5 p-3 font-bold rounded" align="center">
-                        Update
+                    <div class="bg-blue-500 text-white m-0.5 p-3 font-semibold rounded" align="center">
+                        <img src="{% static '/images/update.png' %}" alt="">
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="bg-red-500 text-white m-0.5 p-3 font-semibold rounded" align="center">
+                        <img src="{% static '/images/bin.png' %}" alt="">
                     </div>
                 </a>
             </div>
