@@ -3,7 +3,7 @@
 
 {% block content %}
     <!-- header -->
-    <h1 class="text-center">BARANGAY CAMBARO RESIDENTS</h1>
+    <h1 class="text-center font-bold text-3xl">LIST OF RESIDENTS</h1>
     
     <div class="flex justify-between pt-5">
         <div>
@@ -19,8 +19,13 @@
         </div>
     </div>
 
-    <div class="pt-5">
-        Resident Count: {{ resident_count }}
+    <div class="pt-5 flex">
+        <div>
+            Resident Count: {{ resident_count }}
+        </div>
+        <div class="m-1">
+            <img class="size-4" src="{% static '/images/resident_count.png' %}" alt="">
+        </div>
     </div>
     
     <!-- resident list -->
@@ -36,7 +41,7 @@
             <div class="text-center">Actions</div>
         </div>
         
-        <div class="grid grid-cols-8">    
+        <div class="grid grid-cols-8 resident-grid">    
             {% for resident in residents %}
             <div>{{ resident.first_name }}</div>
             <div>{{ resident.middle_name }}</div>

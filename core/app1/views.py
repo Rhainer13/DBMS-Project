@@ -45,3 +45,6 @@ def update_resident(request, pk):
         'form':form,
     }
     return render(request, 'app1/update-resident.html', context)
+
+def delete_resident(request, pk):
+    pass
