@@ -45,8 +45,8 @@
             <div>{{ resident.purok }}</div>
             <div>{{ resident.phone_number }}</div>
             <div>
-                <a href="#">
-                    <div class="bg-blue-500 text-white m-0.5 p-3 font-bold rounded">
+                <a href="{% url 'update-barangay-resident' resident.id %}">
+                    <div class="bg-blue-500 text-white m-0.5 p-3 font-bold rounded" align="center">
                         Update
                     </div>
                 </a>

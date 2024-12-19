@@ -30,3 +30,18 @@ def add_resident(request):
         'form':form,
     }
     return render(request, 'app1/add-resident.html', context)
+
+def update_resident(request, pk):
+    resident = Resident.objects.get(id=pk)
+    form = ResidentForm(instance=resident)
+
+    if request.method == 'POST':
+        form = ResidentForm(request.POST, instance=resident)
+        if form.is_valid():
+            form.save()
+            return redirect('barangay-residents')
+
+    context = {
+        'form':form,
+    }
+    return render(request, 'app1/add-resident.html', context)
