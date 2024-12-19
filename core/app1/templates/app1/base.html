@@ -1,0 +1,46 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Test</title>
+		{% tailwind_css %}
+        <link rel="stylesheet" href="{% static 'css/test.css' %}">
+        <!-- <script src="{% static 'js/test.js' %}" defer></script> -->
+    </head>
+    
+    <body class="grid grid-cols-[1fr,3fr] h-screen">
+        
+        <!-- side navigation bar -->
+        <nav class="p-5 outline outline-black flex flex-col">
+            
+            <!-- logo -->
+            <div>
+                <a href="{% url 'barangay-home' %}">
+                    <img src="{% static '/images/barangay-cambaro-logo-1.png' %}" alt="" class="">
+                </a>
+            </div>
+            
+            <!-- buttons -->
+            <ul class="p-5 flex-grow">
+                <li><a href="{% url 'barangay-home' %}">Home</a></li>
+                <li><a href="{% url 'barangay-residents' %}">Residents</a></li>
+                <li><a href="#">Medicine Inventory</a></li>
+                <li><a href="#">Documents</a></li>
+            </ul>
+            
+            <ul>
+                <li class="p-5"><a href="#">Log Out</a></li>
+            </ul>
+        </nav>
+        
+        <!-- main content -->
+        <main class="p-5 outline outline-black">
+            {% block content %} 
+            {% endblock content %}
+        </main>
+        <script src="{% static 'js/residents.js' %}"></script>
+    </body>
+</html>
