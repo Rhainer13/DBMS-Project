@@ -68,10 +68,8 @@ def add_resident(request):
             birth_date = form.cleaned_data['birth_date']
             phone_number = form.cleaned_data['phone_number']
 
-            if Resident.objects.filter(first_name=first_name, middle_name=middle_name, last_name=last_name, birth_date=birth_date).exists():
+            if Resident.objects.filter(first_name=first_name, middle_name=middle_name, last_name=last_name).exists():
                 messages.error(request, 'Resident already exists.')
-            elif Resident.objects.filter(phone_number=phone_number).exists():
-                messages.error(request, 'Phone Number already exists.')
             else:
                 Resident.objects.create(
                     first_name=first_name,
