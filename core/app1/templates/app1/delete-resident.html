@@ -10,14 +10,14 @@
     </div>
 </header>
 
-<div class="mt-5">
+<div class="mt-5 border p-5 rounded-xl shadow-xl">
     <form method="POST" action="">
         {% csrf_token %}
 
         <!-- fields -->
         {% for field in form %}
             <div class="flex justify-between mb-4 mx-72">
-                <label for="{{ field.id_for_label }}">
+                <label for="{{ field.id_for_label }}" class="font-bold">
                     {{ field.label }}
                 </label>
                 
