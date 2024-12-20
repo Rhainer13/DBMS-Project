@@ -3,7 +3,9 @@
 
 {% block content %}
     <!-- header -->
-    <h1 class="text-center font-bold text-3xl">LIST OF RESIDENTS</h1>
+     <a href="{% url 'barangay-residents' %}">
+         <h1 class="text-center font-bold text-3xl">LIST OF RESIDENTS</h1>
+     </a>
     
     <div class="flex justify-between pt-5">
         <div>
@@ -15,7 +17,9 @@
         </div>
         
         <div>
-            <input class="" type="text" placeholder="Search Resident...">
+            <form method="GET" action="{% url 'barangay-residents' %}">
+                <input class="" type="text" name="q" placeholder="Search Resident...">
+            </form>
         </div>
     </div>
 
@@ -31,9 +35,9 @@
     <!-- resident list -->
     <div class="pt-5">
         <div class="grid grid-cols-8 mb-5 font-bold border-b border-gray-300 pb-3">
+            <div>Last Name</div>
             <div>First Name</div>
             <div>Middle Name</div>
-            <div>Last Name</div>
             <div>Birth Date</div>
             <div>Gender</div>
             <div>Purok</div>
@@ -41,7 +45,7 @@
             <div class="text-center">Actions</div>
         </div>
         
-        <div class="grid grid-cols-8 resident-grid gap-y-4">
+        <div class="grid grid-cols-8 resident-grid gap-y-4 gap-x-3">
             {% for resident in residents %}
             <div>{{ resident.last_name|title }}</div>
             <div>{{ resident.first_name|title }}</div>

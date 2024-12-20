@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Resident
 from .forms import ResidentForm
 from django.contrib import messages
+from datetime import date, timedelta
+from django.db.models import Q
 
 # Create your views here.
 def index(request):
@@ -9,15 +11,41 @@ def index(request):
     male_residents = Resident.objects.filter(gender='Male').count()
     female_residents = Resident.objects.filter(gender='Female').count()
 
+    # Calculate the date 60 years ago from today
+    sixty_years_ago = date.today() - timedelta(days=60*365.25)
+    senior_residents = Resident.objects.filter(birth_date__lte=sixty_years_ago).count()
+
+    # Calculate the date 18 years ago from today
+    eighteen_years_ago = date.today() - timedelta(days=18*365.25)
+    # Filter residents aged 18 to 59
+    adult_residents = Resident.objects.filter(birth_date__gt=sixty_years_ago, birth_date__lte=eighteen_years_ago).count()
+    
+    # Filter residents less than 18 years old
+    child_residents = Resident.objects.filter(birth_date__gt=eighteen_years_ago).count()
+
     context = {
         'resident_count': resident_count,
         'male_residents': male_residents,
         'female_residents': female_residents,
+        'child_residents': child_residents,
+        'adult_residents': adult_residents,
+        'senior_residents': senior_residents,
     }
     return render(request, 'app1/index.html', context)
 
 def residents(request):
-    residents = Resident.objects.all()
+    q = request.GET.get('q')
+
+    if q:
+        residents = Resident.objects.filter(
+            Q(first_name__icontains=q) |
+            Q(middle_name__icontains=q) |
+            Q(last_name__icontains=q) |
+            Q(phone_number__icontains=q)
+        )
+    else:
+        residents = Resident.objects.all()
+
     resident_count = Resident.objects.count()
 
     context = {
