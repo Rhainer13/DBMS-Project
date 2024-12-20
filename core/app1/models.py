@@ -30,6 +30,9 @@ class Resident(models.Model):
     purok = models.CharField(max_length=20, choices=PUROK_CHOICES, blank=False)
     phone_number = models.CharField(max_length=11)
     
+    class Meta:
+        ordering = ['last_name', 'first_name']
+
     def __str__(self):
         return f'{self.first_name} {self.middle_name} {self.last_name}'
 
