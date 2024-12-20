@@ -30,7 +30,7 @@
     
     <!-- resident list -->
     <div class="pt-5">
-        <div class="grid grid-cols-8 mb-5 font-bold">
+        <div class="grid grid-cols-8 mb-5 font-bold border-b border-gray-300 pb-3">
             <div>First Name</div>
             <div>Middle Name</div>
             <div>Last Name</div>
@@ -41,11 +41,11 @@
             <div class="text-center">Actions</div>
         </div>
         
-        <div class="grid grid-cols-8 resident-grid">
+        <div class="grid grid-cols-8 resident-grid gap-y-4">
             {% for resident in residents %}
+            <div>{{ resident.last_name|title }}</div>
             <div>{{ resident.first_name|title }}</div>
             <div>{{ resident.middle_name|title }}</div>
-            <div>{{ resident.last_name|title }}</div>
             <div>{{ resident.birth_date }}</div>
             <div>{{ resident.gender }}</div>
             <div>{{ resident.purok }}</div>

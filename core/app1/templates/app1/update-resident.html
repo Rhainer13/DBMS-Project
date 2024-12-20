@@ -10,6 +10,14 @@
     </div>
 </header>
 
+{% if messages %} 
+    {% for message in messages %} 
+    <div class="{{ message.tags }} bg-red-500 text-white font-bold py-2 px-4 rounded mt-5 text-center">
+        {{ message }}
+    </div> 
+    {% endfor %}
+{% endif %}
+
 <div class="mt-5">
     <form method="POST" action="">
         {% csrf_token %}
@@ -39,5 +47,23 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const phoneNumberField = document.querySelector('input[name="phone_number"]');
+        
+        phoneNumberField.addEventListener('input', function() {
+            if (!phoneNumberField.value.startsWith('09')) {
+                phoneNumberField.value = '09' + phoneNumberField.value.slice(2);
+            }
+        });
+
+        phoneNumberField.addEventListener('keydown', function(event) {
+            if (phoneNumberField.selectionStart < 2 && (event.key === 'Backspace' || event.key === 'Delete')) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 
 {% endblock content %}
