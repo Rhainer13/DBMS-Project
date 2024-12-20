@@ -68,4 +68,19 @@ def update_resident(request, pk):
     return render(request, 'app1/update-resident.html', context)
 
 def delete_resident(request, pk):
-    pass
+    resident = Resident.objects.get(id=pk)
+    form = ResidentForm(instance=resident)
+
+    first_name = resident.first_name
+    last_name = resident.last_name
+
+    if request.method == 'POST':
+        resident.delete()
+        messages.success(request, f'Resident {first_name.capitalize()} {last_name.capitalize()} has been deleted successfully.')
+        return redirect('barangay-residents')
+    
+    context = {
+        'form':form,
+    }
+
+    return render(request, 'app1/delete-resident.html', context)
