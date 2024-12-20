@@ -21,8 +21,13 @@
                 {{ field.label }}
             </label>
             
-            <div class="ml-5">
+            <div class="ml-5 text-right">
                 {{ field }}
+                {% if field.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {{ field.errors|striptags }}
+                    </div>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

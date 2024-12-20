@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 
 # Create your models here.
 class Resident(models.Model):
@@ -22,13 +23,18 @@ class Resident(models.Model):
         ('Gabi', 'Gabi'),
     ]
     
+    phone_number_validator = RegexValidator(
+        regex=r'^\d{11}$',
+        message='Phone number must be exactly 11 digits.'
+    )
+
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField() 
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, blank=False)
     purok = models.CharField(max_length=20, choices=PUROK_CHOICES, blank=False)
-    phone_number = models.CharField(max_length=11)
+    phone_number = models.CharField(max_length=11, validators=[phone_number_validator])
     
     class Meta:
         ordering = ['last_name', 'first_name']

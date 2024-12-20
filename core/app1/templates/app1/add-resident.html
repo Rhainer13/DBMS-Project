@@ -29,8 +29,13 @@
                 {{ field.label }}
             </label>
             
-            <div class="ml-5">
+            <div class="ml-5 text-right">
                 {{ field }}
+                {% if field.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {{ field.errors|striptags }}
+                    </div>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
@@ -42,5 +47,24 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const phoneNumberField = document.querySelector('input[name="phone_number"]');
+        
+        phoneNumberField.addEventListener('input', function() {
+            if (!phoneNumberField.value.startsWith('09')) {
+                phoneNumberField.value = '09' + phoneNumberField.value.slice(2);
+            }
+        });
+
+        phoneNumberField.addEventListener('keydown', function(event) {
+            if (phoneNumberField.selectionStart < 2 && (event.key === 'Backspace' || event.key === 'Delete')) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
 
 {% endblock content %}
