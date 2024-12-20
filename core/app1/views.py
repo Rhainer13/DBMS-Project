@@ -5,7 +5,15 @@ from django.contrib import messages
 
 # Create your views here.
 def index(request):
-    context = {}
+    resident_count = Resident.objects.count()
+    male_residents = Resident.objects.filter(gender='Male').count()
+    female_residents = Resident.objects.filter(gender='Female').count()
+
+    context = {
+        'resident_count': resident_count,
+        'male_residents': male_residents,
+        'female_residents': female_residents,
+    }
     return render(request, 'app1/index.html', context)
 
 def residents(request):
