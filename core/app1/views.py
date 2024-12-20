@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Resident
-from .forms import ResidentForm
+from .models import Resident, Medicine
+from .forms import ResidentForm, MedicineForm
 from django.contrib import messages
 from datetime import date, timedelta
 from django.db.models import Q
@@ -66,7 +66,6 @@ def add_resident(request):
             middle_name = form.cleaned_data['middle_name'].lower()
             last_name = form.cleaned_data['last_name'].lower()
             birth_date = form.cleaned_data['birth_date']
-            phone_number = form.cleaned_data['phone_number']
 
             if Resident.objects.filter(first_name=first_name, middle_name=middle_name, last_name=last_name).exists():
                 messages.error(request, 'Resident already exists.')
@@ -134,7 +133,67 @@ def delete_resident(request, pk):
     return render(request, 'app1/delete-resident.html', context)
 
 def medicine_inventory(request):
-    context = {
+    medicines = Medicine.objects.all()
 
+    context = {
+        'medicines': medicines,
     }
     return render(request, 'app1/medicine-inventory.html', context)
+
+def add_medicine(request):
+    form = MedicineForm()
+    
+    if request.method == 'POST':
+        form = MedicineForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name'].lower()
+            generic_name = form.cleaned_data['generic_name'].lower()
+            dosage = form.cleaned_data['dosage']
+            type = form.cleaned_data['type']
+            expiry_date = form.cleaned_data['expiry_date']
+            quantity = form.cleaned_data['quantity']
+
+            if Medicine.objects.filter(name=name, generic_name=generic_name).exists():
+                messages.error(request, 'Medicine already exists.')
+            else:
+                Medicine.objects.create(
+                    name=name,
+                    generic_name=generic_name,
+                    dosage=dosage,
+                    type=type,
+                    expiry_date=expiry_date,
+                    quantity=quantity
+                )
+                messages.success(request, f'Medicine {name.capitalize()} has been added successfully.')
+                return redirect('barangay-medicine-inventory')
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'app1/add-medicine.html', context)
+
+def update_medicine(request, pk):
+    medicine = Medicine.objects.get(id=pk)
+    form = MedicineForm(instance=medicine)
+
+    if request.method == 'POST':
+        form = MedicineForm(request.POST, instance=medicine)
+        if form.is_valid():
+            name = form.cleaned_data['name'].lower()
+            generic_name = form.cleaned_data['generic_name'].lower()
+            dosage = form.cleaned_data['dosage']
+            type = form.cleaned_data['type']
+            expiry_date = form.cleaned_data['expiry_date']
+            quantity = form.cleaned_data['quantity']
+
+            if Medicine.objects.filter(name=name, generic_name=generic_name, expiry_date=expiry_date).exclude(id=pk).exists():
+                messages.error(request, 'Medicine already exists.')
+            else:
+                form.save()
+                messages.success(request, f'Medicine {name.capitalize()} has been updated successfully.')
+                return redirect('barangay-medicine-inventory')
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'app1/update-medicine.html', context)
