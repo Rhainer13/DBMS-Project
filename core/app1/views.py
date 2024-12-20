@@ -41,7 +41,9 @@ def residents(request):
             Q(first_name__icontains=q) |
             Q(middle_name__icontains=q) |
             Q(last_name__icontains=q) |
-            Q(phone_number__icontains=q)
+            Q(phone_number__icontains=q) |
+            Q(purok__icontains=q) |
+            Q(gender=q.title())
         )
     else:
         residents = Resident.objects.all()
