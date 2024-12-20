@@ -2,11 +2,16 @@ from django.db import models
 
 # Create your models here.
 class Resident(models.Model):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+    ]
+    
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField() 
-    gender = models.CharField(max_length=1)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=False)
     purok = models.CharField(max_length=20)
     phone_number = models.CharField(max_length=11)
     
