@@ -132,3 +132,9 @@ def delete_resident(request, pk):
     }
 
     return render(request, 'app1/delete-resident.html', context)
+
+def medicine_inventory(request):
+    context = {
+
+    }
+    return render(request, 'app1/medicine-inventory.html', context)
