@@ -6,18 +6,33 @@ class Resident(models.Model):
         ('M', 'Male'),
         ('F', 'Female'),
     ]
+
+    PUROK_CHOICES = [
+        ('Saging', 'Saging'),
+        ('Manga', 'Manga'),
+        ('Cassava', 'Cassava'),
+        ('Camote', 'Camote'),
+        ('Bayabas', 'Bayabas'),
+        ('Ampalaya', 'Ampalaya'),
+        ('Kapayas', 'Kapayas'),
+        ('Talong', 'Talong'),
+        ('Sili', 'Sili'),
+        ('Batong', 'Batong'),
+        ('Agbate', 'Agbate'),
+        ('Gabi', 'Gabi'),
+    ]
     
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField() 
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=False)
-    purok = models.CharField(max_length=20)
+    purok = models.CharField(max_length=20, choices=PUROK_CHOICES, blank=False)
     phone_number = models.CharField(max_length=11)
     
     def __str__(self):
         return f'{self.first_name} {self.middle_name} {self.last_name}'
-    
+
 # class Medicine(models.Model):
 #     name = models.CharField(max_length=50)
 #     description = models.TextField(blank=True)
