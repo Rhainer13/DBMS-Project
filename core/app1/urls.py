@@ -15,4 +15,5 @@ urlpatterns = [
     path('delete-medicine/<int:pk>/', views.delete_medicine, name='barangay-delete-medicine'),
     
     path('medicine-request/', views.medicine_request, name='barangay-medicine-request'),
+    path('medicine-request-history/', views.medicine_request_history, name='barangay-medicine-request-history'),
 ]

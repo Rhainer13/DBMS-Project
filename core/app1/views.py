@@ -228,8 +228,8 @@ def medicine_request(request):
         form = MedicineRequestForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Medicine request submitted successfully.')
-            return redirect('request-medicine')
+            # messages.success(request, 'Medicine request submitted successfully.')
+            return redirect('barangay-medicine-request-history')
     else:
         form = MedicineRequestForm()
 
@@ -237,3 +237,11 @@ def medicine_request(request):
         'form': form,
     }
     return render(request, 'app1/medicine-request.html', context)
+
+def medicine_request_history(request):
+    medicine_requests = MedicineRequest.objects.all()
+
+    context = {
+        'medicine_requests': medicine_requests,
+    }
+    return render(request, 'app1/medicine-request-history.html', context)

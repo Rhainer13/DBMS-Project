@@ -33,3 +33,7 @@ class MedicineRequestForm(forms.ModelForm):
     class Meta:
         model = MedicineRequest
         fields = ['resident', 'medicine', 'quantity']
+        widgets = {
+            'resident': forms.Select(attrs={'id': 'id_resident'}),
+            'medicine': forms.Select(attrs={'id': 'id_medicine'}),
+        }
