@@ -98,13 +98,10 @@ def update_resident(request, pk):
             middle_name = form.cleaned_data['middle_name'].lower()
             last_name = form.cleaned_data['last_name'].lower()
             birth_date = form.cleaned_data['birth_date']
-            phone_number = form.cleaned_data['phone_number']
 
             # Check for duplicate resident
             if Resident.objects.filter(first_name=first_name, middle_name=middle_name, last_name=last_name, birth_date=birth_date).exclude(id=pk).exists():
                 messages.error(request, 'Resident with the same name and birth date already exists.')
-            elif Resident.objects.filter(phone_number=phone_number).exclude(id=pk).exists():
-                messages.error(request, 'Phone Number already exists.')
             else:
                 form.save()
                 messages.success(request, f'Resident {first_name.capitalize()} {last_name.capitalize()} has been updated successfully.')
@@ -133,7 +130,18 @@ def delete_resident(request, pk):
     return render(request, 'app1/delete-resident.html', context)
 
 def medicine_inventory(request):
-    medicines = Medicine.objects.all()
+    q = request.GET.get('q')
+
+    if q:
+        medicines = Medicine.objects.filter(
+            Q(name__icontains=q) |
+            Q(generic_name__icontains=q) |
+            Q(dosage__icontains=q) |
+            Q(type__icontains=q) |
+            Q(expiry_date__icontains=q)
+        )
+    else:
+        medicines = Medicine.objects.all()
 
     context = {
         'medicines': medicines,
