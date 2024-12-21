@@ -56,3 +56,12 @@ class Medicine(models.Model):
 
     def __str__(self):
         return self.generic_name
+    
+class MedicineRequest(models.Model):
+    resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    request_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.resident} requests {self.quantity} of {self.medicine}'

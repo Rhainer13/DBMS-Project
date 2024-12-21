@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Resident, Medicine
-from .forms import ResidentForm, MedicineForm
+from .models import Resident, Medicine, MedicineRequest
+from .forms import ResidentForm, MedicineForm, MedicineRequestForm
 from django.contrib import messages
 from datetime import date, timedelta
 from django.db.models import Q
@@ -222,3 +222,18 @@ def delete_medicine(request, pk):
     }
 
     return render(request, 'app1/delete-medicine.html', context)
+
+def medicine_request(request):
+    if request.method == 'POST':
+        form = MedicineRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Medicine request submitted successfully.')
+            return redirect('request-medicine')
+    else:
+        form = MedicineRequestForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'app1/medicine-request.html', context)

@@ -13,4 +13,6 @@ urlpatterns = [
     path('add-medicine/', views.add_medicine, name='barangay-add-medicine'),
     path('update-medicine/<int:pk>/', views.update_medicine, name='barangay-update-medicine'),
     path('delete-medicine/<int:pk>/', views.delete_medicine, name='barangay-delete-medicine'),
+    
+    path('medicine-request/', views.medicine_request, name='barangay-medicine-request'),
 ]

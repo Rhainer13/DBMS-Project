@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Resident, Medicine
+from .models import Resident, Medicine, MedicineRequest
 from django import forms
 from datetime import date
 
@@ -28,3 +28,8 @@ class MedicineForm(ModelForm):
         if expiry_date and expiry_date < date.today():
             raise forms.ValidationError("Expiry date cannot be in the past.")
         return expiry_date
+    
+class MedicineRequestForm(forms.ModelForm):
+    class Meta:
+        model = MedicineRequest
+        fields = ['resident', 'medicine', 'quantity']
