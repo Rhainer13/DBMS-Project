@@ -9,20 +9,22 @@
 
 <!-- medicine list -->
 <div class="pt-5 border p-5 rounded-xl">
-    <div class="grid grid-cols-5 mb-5 font-bold border-b border-gray-300 pb-3 gap-x-10">
+    <div class="grid grid-cols-6 mb-5 font-bold border-b border-gray-300 pb-3 gap-x-10">
         <div>Date Requested</div>
         <div>Receiver</div>
         <div>Medicine</div>
         <div>Type</div>
+        <div>Dosage</div>
         <div>Quantity</div>
     </div>
     
-    <div class="grid grid-cols-5 resident-grid gap-y-4 gap-x-3">
+    <div class="grid grid-cols-6 resident-grid gap-y-4 gap-x-3">
         {% for request in medicine_requests %}
         <div>{{ request.request_date }}</div>
         <div>{{ request.resident.last_name }}, {{ request.resident.first_name }} {{ request.resident.middle_name }}</div>
         <div>{{ request.medicine.generic_name }}</div>
         <div>{{ request.medicine.type }}</div>
+        <div>{{ request.medicine.dosage }}</div>
         <div>{{ request.quantity }}</div>
         {% endfor %}
     </div>

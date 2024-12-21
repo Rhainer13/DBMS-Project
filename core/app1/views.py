@@ -138,10 +138,10 @@ def medicine_inventory(request):
             Q(generic_name__icontains=q) |
             Q(dosage__icontains=q) |
             Q(type__icontains=q) |
-            Q(expiry_date__icontains=q)
+            Q(expiry_date__gte=date.today())
         )
     else:
-        medicines = Medicine.objects.all()
+        medicines = Medicine.objects.filter(expiry_date__gte=date.today())
 
     context = {
         'medicines': medicines,
