@@ -51,7 +51,7 @@
                     <img src="{% static '/images/update.png' %}" alt="">
                 </div>
             </a>
-            <a href="#">
+            <a href="{% url 'barangay-delete-medicine' medicine.id %}">
                 <div class="bg-red-500 text-white m-0.5 p-3 font-semibold rounded" align="center">
                     <img src="{% static '/images/bin.png' %}" alt="">
                 </div>

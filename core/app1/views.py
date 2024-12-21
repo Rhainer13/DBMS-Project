@@ -153,7 +153,7 @@ def add_medicine(request):
             expiry_date = form.cleaned_data['expiry_date']
             quantity = form.cleaned_data['quantity']
 
-            if Medicine.objects.filter(name=name, generic_name=generic_name).exists():
+            if Medicine.objects.filter(name=name, generic_name=generic_name, expiry_date=expiry_date).exists():
                 messages.error(request, 'Medicine already exists.')
             else:
                 Medicine.objects.create(
@@ -190,10 +190,27 @@ def update_medicine(request, pk):
                 messages.error(request, 'Medicine already exists.')
             else:
                 form.save()
-                messages.success(request, f'Medicine {name.capitalize()} has been updated successfully.')
+                messages.success(request, f'{name.capitalize()} has been updated successfully.')
                 return redirect('barangay-medicine-inventory')
 
     context = {
         'form': form,
     }
     return render(request, 'app1/update-medicine.html', context)
+
+def delete_medicine(request, pk):
+    medicine = Medicine.objects.get(id=pk)
+    form = MedicineForm(instance=medicine)
+
+    name = medicine.name
+
+    if request.method == 'POST':
+        medicine.delete()
+        messages.success(request, f'{name.capitalize()} has been deleted successfully.')
+        return redirect('barangay-medicine-inventory')
+    
+    context = {
+        'form':form,
+    }
+
+    return render(request, 'app1/delete-medicine.html', context)
