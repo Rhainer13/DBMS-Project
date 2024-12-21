@@ -227,9 +227,18 @@ def medicine_request(request):
     if request.method == 'POST':
         form = MedicineRequestForm(request.POST)
         if form.is_valid():
-            form.save()
-            # messages.success(request, 'Medicine request submitted successfully.')
-            return redirect('barangay-medicine-request-history')
+            medicine_request = form.save(commit=False)
+            medicine = medicine_request.medicine
+            requested_quantity = medicine_request.quantity
+
+            if requested_quantity > medicine.quantity:
+                messages.error(request, 'Requested quantity exceeds available stock.')
+            else:
+                medicine.quantity -= requested_quantity
+                medicine.save()
+                medicine_request.save()
+                messages.success(request, 'Medicine request submitted successfully.')
+                return redirect('barangay-medicine-request-history')
     else:
         form = MedicineRequestForm()
 
