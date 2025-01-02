@@ -16,4 +16,8 @@ urlpatterns = [
     
     path('medicine-request/', views.medicine_request, name='barangay-medicine-request'),
     path('medicine-request-history/', views.medicine_request_history, name='barangay-medicine-request-history'),
+
+    path('children-list/', views.children_list, name='children-list'),
+    path('update-visit/<int:pk>/', views.update_visit, name='update-visit'),
+    path('child-vaccine-history/<int:pk>/', views.visit_history, name='child-vaccine-history'),
 ]

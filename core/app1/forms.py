@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Resident, Medicine, MedicineRequest
+from .models import Resident, Medicine, MedicineRequest, ChildVaccineHistory
 from django import forms
 from datetime import date
 
@@ -36,4 +36,12 @@ class MedicineRequestForm(forms.ModelForm):
         widgets = {
             'resident': forms.Select(attrs={'id': 'id_resident'}),
             'medicine': forms.Select(attrs={'id': 'id_medicine'}),
+        }
+
+class ChildVaccineHistoryForm(forms.ModelForm):
+    class Meta:
+        model = ChildVaccineHistory
+        exclude = ['resident']
+        widgets = {
+            'date_given': forms.DateInput(attrs={'type': 'date', 'class': 'form-field'}),
         }

@@ -65,3 +65,16 @@ class MedicineRequest(models.Model):
 
     def __str__(self):
         return f'{self.resident} requests {self.quantity} of {self.medicine}'
+
+class ChildVaccineHistory(models.Model):
+    resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    visit_number = models.PositiveIntegerField()
+    vaccine_name = models.TextField(max_length=100)
+    health_worker = models.CharField(max_length=50)
+    date_given = models.DateField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['resident']
+
+    def __str__(self):
+        return f'{self.resident} has been given {self.vaccine_name} on {self.date_given}'

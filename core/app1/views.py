@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Resident, Medicine, MedicineRequest
-from .forms import ResidentForm, MedicineForm, MedicineRequestForm
+from .models import Resident, Medicine, MedicineRequest, ChildVaccineHistory
+from .forms import ResidentForm, MedicineForm, MedicineRequestForm, ChildVaccineHistoryForm
 from django.contrib import messages
 from datetime import date, timedelta
 from django.db.models import Q
@@ -137,11 +137,11 @@ def medicine_inventory(request):
             Q(name__icontains=q) |
             Q(generic_name__icontains=q) |
             Q(dosage__icontains=q) |
-            Q(type__icontains=q) |
-            Q(expiry_date__gte=date.today())
+            Q(type__icontains=q),
+            Q(expiry_date__gt=date.today())
         )
     else:
-        medicines = Medicine.objects.filter(expiry_date__gte=date.today())
+        medicines = Medicine.objects.filter(expiry_date__gt=date.today())
 
     context = {
         'medicines': medicines,
@@ -245,6 +245,7 @@ def medicine_request(request):
     context = {
         'form': form,
     }
+
     return render(request, 'app1/medicine-request.html', context)
 
 def medicine_request_history(request):
@@ -254,3 +255,48 @@ def medicine_request_history(request):
         'medicine_requests': medicine_requests,
     }
     return render(request, 'app1/medicine-request-history.html', context)
+
+def children_list(request):
+    # Calculate the date 18 years ago from today
+    eighteen_years_ago = date.today() - timedelta(days=18*365.25)
+
+    children = Resident.objects.filter(birth_date__gt=eighteen_years_ago)
+    
+    context = {
+        'children': children,
+    }
+    
+    return render(request, 'app1/children-list.html', context)
+
+def update_visit(request, pk=None):
+    resident = Resident.objects.get(id=pk)
+
+    if request.method == 'POST':
+        form = ChildVaccineHistoryForm(request.POST)
+        if form.is_valid():
+            vaccine_history = form.save(commit=False)
+            vaccine_history.resident = resident
+            vaccine_history.save()
+            # messages.success(request, 'Vaccine history updated successfully.')
+            return redirect('children-list')
+    else:
+        form = ChildVaccineHistoryForm()
+
+    context = {
+        'form': form,
+        'resident': resident,
+    }
+
+    return render(request, 'app1/update-visit.html', context)
+
+def visit_history(request, pk):
+    resident = Resident.objects.get(id=pk)
+    vaccine_history = ChildVaccineHistory.objects.filter(resident=pk)
+
+    context = {
+        'resident': resident,
+        'vaccine_history': vaccine_history,
+    }
+
+    return render(request, 'app1/child-vaccine-history.html', context)
+                
