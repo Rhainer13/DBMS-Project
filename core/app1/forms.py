@@ -29,14 +29,26 @@ class MedicineForm(ModelForm):
             raise forms.ValidationError("Expiry date cannot be in the past.")
         return expiry_date
     
+# class MedicineRequestForm(forms.ModelForm):
+#     class Meta:
+#         model = MedicineRequest
+#         fields = ['resident', 'medicine', 'quantity']
+#         widgets = {
+#             'resident': forms.Select(attrs={'id': 'id_resident'}),
+#             'medicine': forms.Select(attrs={'id': 'id_medicine'}),
+#         }
+
 class MedicineRequestForm(forms.ModelForm):
     class Meta:
         model = MedicineRequest
         fields = ['resident', 'medicine', 'quantity']
         widgets = {
-            'resident': forms.Select(attrs={'id': 'id_resident'}),
-            'medicine': forms.Select(attrs={'id': 'id_medicine'}),
+            'medicine': forms.Select(attrs={'class': 'form-field'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(MedicineRequestForm, self).__init__(*args, **kwargs)
+        self.fields['medicine'].queryset = Medicine.objects.filter(expiry_date__gte=date.today())
 
 class ChildVaccineHistoryForm(forms.ModelForm):
     class Meta:
