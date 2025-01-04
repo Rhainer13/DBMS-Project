@@ -2,10 +2,10 @@
 {% load static tailwind_tags %}
 
 {% block content %}
-<header class="bg-blue-500 text-white py-6 shadow-md">
+<header class="bg-green-500 text-white py-6 shadow-md">
     <div class="container mx-auto">
         <h1 class="text-center text-3xl font-bold">
-            Update Vaccine Visit For - {{ resident.last_name|title }}, {{ resident.first_name|title }} {{ resident.middle_name|title }}
+            REQUEST DOCUMENT
         </h1>
     </div>
 </header>
@@ -40,11 +40,11 @@
         </div>
         {% endfor %}
 
-        <!-- {{ form.as_p }} -->
+        <!-- submit and cancel button -->
         <div class="flex pt-5 justify-center space-x-4">
             <input type="submit" value="Submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded">
-            <a href="{% url 'children-list' %}" class="bg-red-500 text-white font-bold py-2 px-4 rounded text-center">Cancel</a>
+            <a href="{% url 'document-request-history' %}" class="bg-red-500 text-white font-bold py-2 px-4 rounded text-center">Cancel</a>
         </div>
     </form>
 </div>
-{% endblock %}
+{% endblock content %}

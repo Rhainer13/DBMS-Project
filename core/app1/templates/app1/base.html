@@ -14,30 +14,42 @@
     <body class="grid grid-cols-[1fr,3fr] h-screen">
         
         <!-- side navigation bar -->
-        <nav class="p-5 outline outline-black flex flex-col">
-            
+        <nav class="bg-gray-800 text-white p-5 flex flex-col h-full">
             <!-- logo -->
-            <div>
+            <div class="mb-5">
                 <a href="{% url 'barangay-home' %}">
-                    <img src="{% static '/images/barangay-cambaro-logo-1.png' %}" alt="" class="">
+                    <img src="{% static '/images/barangay-cambaro-logo-1.png' %}" alt="Barangay Cambaro Logo" class="w-32 mx-auto bg-white p-2 rounded">
                 </a>
             </div>
             
             <!-- buttons -->
-            <ul class="p-5 flex-grow">
-                <li><a href="{% url 'barangay-home' %}">Home</a></li>
-                <li><a href="{% url 'barangay-residents' %}">Residents</a></li>
-                <li><a href="{% url 'barangay-medicine-inventory' %}">Medicine Inventory</a></li>
-                <li><a href="{% url 'children-list' %}">Child Vaccine Record</a></li>
+            <ul class="flex-grow space-y-4">
+                <li>
+                    <a href="{% url 'barangay-home' %}" class="block py-2 px-4 rounded hover:bg-gray-700">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'barangay-residents' %}" class="block py-2 px-4 rounded hover:bg-gray-700">Residents</a>
+                </li>
+                <li>
+                    <a href="{% url 'barangay-medicine-inventory' %}" class="block py-2 px-4 rounded hover:bg-gray-700">Medicine Inventory</a>
+                </li>
+                <li>
+                    <a href="{% url 'children-list' %}" class="block py-2 px-4 rounded hover:bg-gray-700">Child Vaccine Record</a>
+                </li>
+                <li>
+                    <a href="{% url 'document-request-history' %}" class="block py-2 px-4 rounded hover:bg-gray-700">Document Request</a>
+                </li>
             </ul>
             
-            <ul>
-                <li class="p-5"><a href="#">Log Out</a></li>
+            <ul class="mt-auto">
+                <li class="p-5">
+                    <a href="#" class="block py-2 px-4 rounded bg-red-500 hover:bg-red-600 text-center">Log Out</a>
+                </li>
             </ul>
         </nav>
         
         <!-- main content -->
-        <main class="p-5 outline outline-black">
+        <main class="p-5">
             {% block content %} 
             {% endblock content %}
         </main>

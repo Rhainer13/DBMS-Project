@@ -40,7 +40,7 @@ class Resident(models.Model):
         ordering = ['last_name', 'first_name']
 
     def __str__(self):
-        return f'{self.first_name} {self.middle_name} {self.last_name}'
+        return f'{self.last_name.capitalize()}, {self.first_name.capitalize()} {self.middle_name.capitalize()}'
 
 class Medicine(models.Model):
     name = models.CharField(max_length=50)
@@ -78,3 +78,20 @@ class ChildVaccineHistory(models.Model):
 
     def __str__(self):
         return f'{self.resident} has been given {self.vaccine_name} on {self.date_given}'
+    
+class DocumentRequest(models.Model):
+    DOCUMENT_CHOICES = [
+        ('doc1', 'doc1'),
+        ('doc2', 'doc2'),
+    ]
+
+    request_date = models.DateField(auto_now_add=True)
+    resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    document_name = models.TextField(max_length=50, choices=DOCUMENT_CHOICES, blank=False)
+    purpose = models.TextField(max_length=100, blank=True)
+    
+    class Meta:
+        ordering = ['-request_date']
+
+    def __str__(self):
+        return f'{self.resident} requested for {self.document_name} on {self.request_date}'

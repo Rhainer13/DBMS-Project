@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import Resident, Medicine, MedicineRequest, ChildVaccineHistory
-from .forms import ResidentForm, MedicineForm, MedicineRequestForm, ChildVaccineHistoryForm
+from .models import Resident, Medicine, MedicineRequest, ChildVaccineHistory, DocumentRequest
+from .forms import ResidentForm, MedicineForm, MedicineRequestForm, ChildVaccineHistoryForm, DocumentRequestForm
 from django.contrib import messages
 from datetime import date, timedelta
 from django.db.models import Q
+from docxtpl import DocxTemplate
+import os
 
 # Create your views here.
 def index(request):
@@ -48,7 +50,8 @@ def residents(request):
     else:
         residents = Resident.objects.all()
 
-    resident_count = Resident.objects.count()
+    # resident_count = Resident.objects.count()
+    resident_count = residents.count()
 
     context = {
         'residents': residents, 
@@ -300,3 +303,59 @@ def visit_history(request, pk):
 
     return render(request, 'app1/child-vaccine-history.html', context)
                 
+
+def document_request_history(request):
+    document_requests = DocumentRequest.objects.all()
+
+    context = {
+        'document_requests': document_requests,
+    }
+
+    return render(request, 'app1/document-request-history.html', context)
+
+def document_request(request):
+    if request.method == 'POST':
+        form = DocumentRequestForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['resident'].first_name
+            middle_name = form.cleaned_data['resident'].middle_name
+            last_name = form.cleaned_data['resident'].last_name
+            purpose = form.cleaned_data['purpose']
+            document_name = form.cleaned_data['document_name']
+            
+            # Save the form and get the saved instance
+            document_request_instance = form.save()
+
+            # Query the saved instance to get the request_date
+            request_date = document_request_instance.request_date
+
+            file_name = f'{document_name}.docx'
+            output_name = f'[{request_date}] {last_name.capitalize()}, {first_name.capitalize()} {middle_name.capitalize()}.docx'
+
+            template_path = os.path.expanduser(f'~/Desktop/drafts/{file_name}')
+            output_path = os.path.expanduser(f'~/Desktop/releasing/{document_name}/{output_name}')
+
+            doc = DocxTemplate(template_path)
+
+            context = { 
+                'first_name' : first_name,
+                'middle_name' : middle_name,
+                'last_name' : last_name,
+                'purpose' : purpose,
+                'request_date' : request_date,
+            }
+
+            doc.render(context)
+            doc.save(output_path)
+
+            # form.save()
+            messages.success(request, 'Document request submitted successfully.')
+            return redirect('document-request-history')
+    else:
+        form = DocumentRequestForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'app1/document-request.html', context)
