@@ -1,19 +1,37 @@
 from django.forms import ModelForm
-from .models import Resident, Medicine, MedicineRequest, ChildVaccineHistory, DocumentRequest
+from .models import Resident, Medicine, MedicineRequest, ChildVaccineHistory, DocumentRequest, Staff
 from django import forms
-from datetime import date
+from datetime import date, datetime
+
 
 class ResidentForm(ModelForm):
     class Meta:
         model = Resident
         fields = '__all__'
         widgets = {
-            'birth_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-field', 'min': '1900-01-01', 'max': '2024-12-31'}),
+            'birth_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-field', 'min': '1900-01-01'}),
         }
 
     def __init__(self, *args, **kwargs):
         super(ResidentForm, self).__init__(*args, **kwargs)
         self.fields['phone_number'].initial = '09'
+        current_year = datetime.now().year
+        self.fields['birth_date'].widget.attrs['max'] = f'{current_year}-12-31'
+
+class StaffForm(ModelForm):
+    class Meta:
+        model = Staff
+        fields = '__all__'
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-field', 'min': '1900-01-01'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(StaffForm, self).__init__(*args, **kwargs)
+        self.fields['phone_number'].initial = '09'
+        current_year = datetime.now().year
+        self.fields['birth_date'].widget.attrs['max'] = f'{current_year}-12-31'
+
 
 class MedicineForm(ModelForm):
     class Meta:

@@ -22,5 +22,10 @@ urlpatterns = [
     path('child-vaccine-history/<int:pk>/', views.visit_history, name='child-vaccine-history'),
     
     path('document-request-history/', views.document_request_history, name='document-request-history'),
-    path('document-request', views.document_request, name='document-request')
+    path('document-request', views.document_request, name='document-request'),
+
+    path('staff/', views.staff, name='staff'),
+    path('add-staff/', views.add_staff, name='add-staff'),
+    path('update-staff/<int:pk>/', views.update_staff, name='update-staff'),
+    path('delete-staff/<int:pk>/', views.delete_staff, name='delete-staff'),
 ]

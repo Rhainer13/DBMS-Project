@@ -41,6 +41,37 @@ class Resident(models.Model):
 
     def __str__(self):
         return f'{self.last_name.capitalize()}, {self.first_name.capitalize()} {self.middle_name.capitalize()}'
+    
+class Staff(models.Model):
+    GENDER_CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+    ]
+
+    ROLE_CHOICES = [
+        ('Admin', 'Admin'),
+        ('Health Worker', 'Health Worker'),
+        ('Front Desk', 'Front Desk'),
+    ]
+    
+    phone_number_validator = RegexValidator(
+        regex=r'^\d{11}$',
+        message='Phone number must be exactly 11 digits.'
+    )
+
+    first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50)
+    birth_date = models.DateField() 
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, blank=False)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, blank=False)
+    phone_number = models.CharField(max_length=11, validators=[phone_number_validator])
+    
+    class Meta:
+        ordering = ['last_name', 'first_name']
+
+    def __str__(self):
+        return f'{self.last_name.capitalize()}, {self.first_name.capitalize()} {self.middle_name.capitalize()}'
 
 class Medicine(models.Model):
     name = models.CharField(max_length=50)
@@ -70,7 +101,7 @@ class ChildVaccineHistory(models.Model):
     resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
     visit_number = models.PositiveIntegerField()
     vaccine_name = models.TextField(max_length=100)
-    health_worker = models.CharField(max_length=50)
+    health_worker = models.ForeignKey(Staff, null=True, on_delete=models.SET_NULL)
     date_given = models.DateField(auto_now_add=True)
     
     class Meta:

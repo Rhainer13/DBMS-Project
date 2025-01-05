@@ -3,32 +3,23 @@
 
 {% block content %}
     <!-- header -->
-    <a href="{% url 'barangay-residents' %}">
-        <h1 class="text-center font-bold text-3xl p-5">LIST OF RESIDENTS</h1>
+    <a href="{% url 'staff' %}">
+        <h1 class="text-center font-bold text-3xl p-5">LIST OF STAFF</h1>
     </a>
     
-    <div class="flex justify-between pt-5">
+    <div class="flex justify-between pt-5 mb-5">
         <div>
-            <a href="{% url 'add-barangay-resident' %}">
+            <a href="{% url 'add-staff' %}">
                 <div class="bg-green-500 text-white font-bold py-2 px-4 rounded">
-                    Add New Resident
+                    Add New Staff
                 </div>
             </a>
         </div>
         
         <div>
-            <form method="GET" action="{% url 'barangay-residents' %}">
+            <form method="GET" action="{% url 'staff' %}">
                 <input class="" type="text" name="q" placeholder="Search Resident...">
             </form>
-        </div>
-    </div>
-
-    <div class="py-5 pl-3 flex">
-        <div>
-            Resident Count: {{ resident_count }}
-        </div>
-        <div class="m-1">
-            <img class="size-4" src="{% static '/images/resident_count.png' %}" alt="">
         </div>
     </div>
     
@@ -40,27 +31,27 @@
             <div>Middle Name</div>
             <div>Birth Date</div>
             <div>Gender</div>
-            <div>Purok</div>
+            <div>Role</div>
             <div>Phone Number</div>
             <div class="text-center">Actions</div>
         </div>
         
-        <div class="grid grid-cols-8 resident-grid gap-y-4 gap-x-3">
-            {% for resident in residents %}
-            <div>{{ resident.last_name|title }}</div>
-            <div>{{ resident.first_name|title }}</div>
-            <div>{{ resident.middle_name|title }}</div>
-            <div>{{ resident.birth_date }}</div>
-            <div>{{ resident.gender }}</div>
-            <div>{{ resident.purok }}</div>
-            <div>{{ resident.phone_number }}</div>
+        <div class="grid grid-cols-8 resident-grid gap-y-4">
+            {% for a in staff %}
+            <div>{{ a.last_name|title }}</div>
+            <div>{{ a.first_name|title }}</div>
+            <div>{{ a.middle_name|title }}</div>
+            <div>{{ a.birth_date }}</div>
+            <div>{{ a.gender }}</div>
+            <div>{{ a.role }}</div>
+            <div>{{ a.phone_number }}</div>
             <div class="grid grid-cols-2">
-                <a href="{% url 'update-barangay-resident' resident.id %}">
+                <a href="{% url 'update-staff' a.id %}">
                     <div class="bg-blue-500 text-white m-0.5 p-3 font-semibold rounded" align="center">
                         <img src="{% static '/images/update.png' %}" alt="">
                     </div>
                 </a>
-                <a href="{% url 'delete-barangay-resident' resident.id %}">
+                <a href="{% url 'delete-staff' a.id %}">
                     <div class="bg-red-500 text-white m-0.5 p-3 font-semibold rounded" align="center">
                         <img src="{% static '/images/bin.png' %}" alt="">
                     </div>

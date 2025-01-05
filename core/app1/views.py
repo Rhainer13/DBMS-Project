@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Resident, Medicine, MedicineRequest, ChildVaccineHistory, DocumentRequest
-from .forms import ResidentForm, MedicineForm, MedicineRequestForm, ChildVaccineHistoryForm, DocumentRequestForm
+from .models import Resident, Medicine, MedicineRequest, ChildVaccineHistory, DocumentRequest, Staff
+from .forms import ResidentForm, MedicineForm, MedicineRequestForm, ChildVaccineHistoryForm, DocumentRequestForm, StaffForm
 from django.contrib import messages
 from datetime import date, timedelta
 from django.db.models import Q
@@ -359,3 +359,95 @@ def document_request(request):
     }
 
     return render(request, 'app1/document-request.html', context)
+
+def staff(request):
+    q = request.GET.get('q')
+
+    if q:
+        staff = Staff.objects.filter(
+            Q(first_name__icontains=q) |
+            Q(middle_name__icontains=q) |
+            Q(last_name__icontains=q) |
+            Q(phone_number__icontains=q) |
+            Q(gender=q.title())
+        )
+    else:
+        staff = Staff.objects.all()
+
+    context = {
+        'staff': staff, 
+    }
+    return render(request, 'app1/staff.html', context)
+
+def add_staff(request):
+    form = StaffForm()
+
+    if request.method == 'POST':
+        form = StaffForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name'].lower()
+            middle_name = form.cleaned_data['middle_name'].lower()
+            last_name = form.cleaned_data['last_name'].lower()
+            birth_date = form.cleaned_data['birth_date']
+
+            if Staff.objects.filter(first_name=first_name, middle_name=middle_name, last_name=last_name).exists():
+                messages.error(request, 'Staff already exists.')
+            else:
+                Staff.objects.create(
+                    first_name=first_name,
+                    middle_name=middle_name,
+                    last_name=last_name,
+                    birth_date=birth_date,
+                    gender=form.cleaned_data['gender'],
+                    role=form.cleaned_data['role'],
+                    phone_number=form.cleaned_data['phone_number']
+                )
+                messages.success(request, f'Staff {first_name.capitalize()} {last_name.capitalize()} has been added successfully.')
+                return redirect('staff')
+
+    context = {
+        'form':form,
+    }
+    return render(request, 'app1/add-staff.html', context)
+
+def update_staff(request, pk):
+    staff = Staff.objects.get(id=pk)
+    form = StaffForm(instance=staff)
+
+    if request.method == 'POST':
+        form = StaffForm(request.POST, instance=staff)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name'].lower()
+            middle_name = form.cleaned_data['middle_name'].lower()
+            last_name = form.cleaned_data['last_name'].lower()
+            birth_date = form.cleaned_data['birth_date']
+
+            # Check for duplicate staff
+            if Staff.objects.filter(first_name=first_name, middle_name=middle_name, last_name=last_name, birth_date=birth_date).exclude(id=pk).exists():
+                messages.error(request, 'Staff with the same name and birth date already exists.')
+            else:
+                form.save()
+                messages.success(request, f'Staff {first_name.capitalize()} {last_name.capitalize()} has been updated successfully.')
+                return redirect('staff')
+    context = {
+        'form':form,
+    }
+    return render(request, 'app1/update-staff.html', context)
+
+def delete_staff(request, pk):
+    staff = Staff.objects.get(id=pk)
+    form = StaffForm(instance=staff)
+
+    first_name = staff.first_name
+    last_name = staff.last_name
+
+    if request.method == 'POST':
+        staff.delete()
+        messages.success(request, f'Staff {first_name.capitalize()} {last_name.capitalize()} has been deleted successfully.')
+        return redirect('staff')
+    
+    context = {
+        'form':form,
+    }
+
+    return render(request, 'app1/delete-staff.html', context)
