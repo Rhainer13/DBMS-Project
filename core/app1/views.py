@@ -6,6 +6,8 @@ from datetime import date, timedelta
 from django.db.models import Q
 from docxtpl import DocxTemplate
 import os
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def index(request):
@@ -451,3 +453,31 @@ def delete_staff(request, pk):
     }
 
     return render(request, 'app1/delete-staff.html', context)
+
+def login_page(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # if username == 'admin' and password == 'admin':
+        #     return redirect('barangay-home')
+        # else:
+        #     messages.error(request, 'Invalid credentials')
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            messages.error(request, 'Invalid credentials')
+            # return redirect('login')
+        
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('barangay-home')
+
+    return render(request, 'app1/login.html')
+
+def logout_page(request):
+    logout(request)
+    return redirect('login')
